@@ -3,7 +3,7 @@ module Loki
   IDENTITY_MAP = {}
 
   module Identity
-    def self.included(other)  
+    def self.included(other)
       other.class_eval %{
         class << self
           alias_method :__#{other.to_s.gsub(':','')}_new, :new

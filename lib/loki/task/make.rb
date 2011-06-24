@@ -28,13 +28,6 @@ module Loki
       def up_to_date?
         (@children + @sources).none? { |task| task.time > time }
       end
-      
-      def test?
-        @children.find_all { |task| task.time > time }.each do |o|
-          ap "#{o.name} #{o.time}"
-        end
-        (@children + @sources).reject(&:sham?).none? { |task| task.time > time }
-      end
 
     end # class
   end # module

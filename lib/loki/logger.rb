@@ -1,7 +1,7 @@
 module Loki
   class Logger
     include Singleton
-    
+
 
     COLORS = {
       :red     => 31,
@@ -44,10 +44,10 @@ module Loki
     def line
       $stdout.puts("-" * 80) if @indent == 0
     end
-    
-    
+
+
     public
-    
+
     def paint(text, color = :white)
       "\e[#{COLORS[color]}m#{text}\e[0m"
     end

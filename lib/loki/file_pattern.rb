@@ -19,8 +19,8 @@ module Loki
         yield FilePath.new(file) if block_given?
       end
     end
-    
-    
+
+
     def interpolate_each(result_pattern, &block)
       each do |source_path|
         yield source_path, interpolate(source_path, result_pattern) if block_given?
@@ -51,8 +51,8 @@ module Loki
     def to_s
       @path.to_s
     end
-    
-    
+
+
     private
 
     def interpolate(source_path, result_pattern)

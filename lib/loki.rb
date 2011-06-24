@@ -27,7 +27,7 @@ module Loki
 
   def self.block_unique_id(&block)
     source = block.source_location
-    ::File.expand_path(source[0]) + ":#{source[1]}"
+    ::File.expand_path(source[0]) + ":" + source[1].to_s
   end
 
 end # module
