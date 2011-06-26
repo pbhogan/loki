@@ -15,7 +15,7 @@ require "loki/task/make"
 
 module Loki
 
-  def self.task(name = :task, &block)
+  def task(name = :task, &block)
     task = Task::Task.new(name)
     task.instance_eval(&block)
     # task.list

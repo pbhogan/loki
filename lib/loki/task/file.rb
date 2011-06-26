@@ -4,7 +4,8 @@ module Loki
       include Identity
 
 
-      def initialize(path)
+      def initialize(path, sources = nil)
+        @sources = Array(sources).map { |s| File.new(s) }
         @path = FilePath.new(path)
         super(@path.relative)
       end
@@ -12,6 +13,21 @@ module Loki
 
       def self.identify(name)
         ::File.expand_path(name.to_s)
+      end
+
+
+      def sources
+        @sources.collect(&:path)
+      end
+
+
+      def source_path
+        @sources.first.path
+      end
+
+
+      def result_path
+        @path.path
       end
 
 
@@ -31,7 +47,7 @@ module Loki
 
 
       def up_to_date?
-        @children.none? { |task| task.time > time }
+        (@children + @sources).none? { |task| task.time > time }
       end
 
 

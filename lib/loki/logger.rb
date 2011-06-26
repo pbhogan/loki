@@ -26,6 +26,11 @@ module Loki
     end
 
 
+    def indented?
+      @indent > 0
+    end
+
+
     def push
       @indent += 1
     end

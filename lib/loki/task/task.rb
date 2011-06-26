@@ -23,19 +23,7 @@ module Loki
 
 
       def make(result_pattern, source_pattern = nil, &block)
-        if source_pattern.nil?
-          add_dependency Make.new(result_pattern), &block
-        else
-          source_pattern = FilePattern.new(source_pattern)
-          result_pattern = FilePattern.new(result_pattern)
-          if result_pattern.individual?
-            add_dependency Make.new(result_pattern, source_pattern.to_a), &block
-          else
-            source_pattern.interpolate_each(result_pattern) do |source_path, result_path|
-              add_dependency Make.new(result_path, source_path), &block
-            end
-          end
-        end
+        add_dependency Make.new(result_pattern, source_pattern, &block)
       end
 
 
@@ -49,7 +37,7 @@ module Loki
 
       def work
         super do
-          @children.each do |task|
+          children.each do |task|
             task.work unless task.done?
           end
         end
@@ -57,18 +45,18 @@ module Loki
 
 
       def done?
-        @children.reject(&:sham?).all?(&:done?)
+        children.reject(&:sham?).all?(&:done?)
       end
 
 
       def time
-        @children.collect(&:time).max || super
+        children.collect(&:time).max || super
       end
 
 
       def list
         super do
-          @children.each do |task|
+          children.each do |task|
             task.list
           end
         end
@@ -80,7 +68,7 @@ module Loki
       def add_dependency(task, &block)
         unless children.include?(task)
           task.parent = self
-          children << task
+          @children << task
           task.evaluate(&block) if block_given?
         end
         task

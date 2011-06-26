@@ -11,7 +11,7 @@ module Loki
 
 
       def work(&block)
-        Loki.logger.puts "#{@name}"
+        Loki.logger.puts "#{@name}" if Loki.logger.indented?
         Loki.logger.push
         yield if block_given?
         Loki.logger.pull
@@ -56,7 +56,12 @@ module Loki
 
 
       def siblings
-        @parent.children.reject { |task| task == self }
+        @parent.children.reject { |child| child.equal?(self) }
+      end
+
+
+      def siblings_prior
+        @parent.children.take_while { |child| !child.equal?(self) }
       end
 
 
